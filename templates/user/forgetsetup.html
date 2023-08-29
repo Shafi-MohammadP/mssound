@@ -1,0 +1,124 @@
+{% extends 'basee.html' %}
+{% load static %}
+{% block title %}Forgot password{% endblock %}
+
+
+
+{% block content %}
+
+{% if otp %}
+<div class="container">
+    <div class="form-box">
+        <div class="form-tab">
+            <ul class="nav nav-pills nav-fill" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="signin-tab-2" data-toggle="tab" href="#" role="tab"
+                        aria-controls="signin-2">Forgot Password</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="signin-2" role="tabpanel" aria-labelledby="signin-tab-2">
+
+                    <form action="{% url 'forgot_password' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="singin-email-2">Enter your OTP *</label>
+                            <input type="text" class="form-control" placeholder="" name="otp" value="{{pre_otp}}">
+                        
+                        </div><!-- End .form-group -->
+
+                        <div class="form-group">
+                            <label for="singin-email-2">Password *</label>
+                            <input type="password" class="form-control" placeholder="" name="password1">
+                        </div> <!-- form-group// -->
+
+                        <div class="form-group">
+                            <label for="singin-email-2">Confirm Password *</label>
+                            <input type="password" class="form-control" placeholder="" name="password2">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="hidden" value="{{user.email}}" name="email">
+                        </div>
+
+                        <div class="form-group">
+                            <a href="{% url 'user_login1' %}" class="float-right">Got Password?</a>
+                        </div><!-- End .form-group -->
+
+                        <div class="form-footer">
+                            <button type="submit" class="btn btn-outline-primary-2">
+                                <span>SUBMIT</span>
+                                <i class="icon-long-arrow-right"></i>
+                            </button>
+                            <br><br>
+                            {% for message in messages %}
+                            <div class="message text-center {% if message.tags %}{{ message.tags }}{% endif %}">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+
+
+                        </div><!-- End .form-footer -->
+                        <p class="text-center mt-4">Didn't have a Account?<a href="{%url 'user_signup'%}">Sign Up</a>
+                        </p>
+
+                    </form>
+
+
+                </div><!-- .End .tab-pane -->
+            </div><!-- End .tab-content -->
+        </div><!-- End .form-tab -->
+    </div><!-- End .form-box -->
+</div><!-- End .container -->
+
+{% else %}
+<div class="container">
+    <div class="form-box">
+        <div class="form-tab">
+            <ul class="nav nav-pills nav-fill" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="signin-tab-2" data-toggle="tab" href="#signin-2" role="tab" aria-controls="signin-2">Verify</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="signin-2" role="tabpanel" aria-labelledby="signin-tab-2">
+                   
+                    <form action="{% url 'forgot_password' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="singin-email-2">Enter your Email ID *</label>
+                            <input type="text" class="form-control" placeholder="" name="email"  >
+                        </div><!-- End .form-group -->
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block"> verify Email  </button>
+                        </div>
+
+                        <div class="form-group">
+                            <a href="{% url 'user_login1' %}" class="float-right">Got Password?</a>
+                        </div><!-- End .form-group -->
+        
+                        <div class="form-footer">
+                          <br>
+                                                      
+                        </div><!-- End .form-footer -->
+                        <p class="text-center mt-4">Didn't have a Account?<a href="{% url 'user_signup' %}">Sign Up</a></p>
+                        <br>
+                        {% for message in messages %}
+                        <div class="message text-center {% if message.tags %}{{ message.tags }}{% endif %}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+
+                            
+                    </form>
+                   
+                    </div><!-- End .form-choice -->
+                </div><!-- .End .tab-pane -->
+            </div><!-- End .tab-content -->
+        </div><!-- End .form-tab -->                        
+    </div><!-- End .form-box -->
+</div><!-- End .container -->
+{% endif %}
+
+{% endblock %}

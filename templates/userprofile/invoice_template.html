@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <style>
+        /* Define your CSS styles for the invoice here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .invoice-details {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-header">
+        <h1>Invoice</h1>
+    </div>
+    
+    <div class="invoice-details">
+        <p><strong>Order ID:</strong> {{ order_id }}</p>
+        <!-- Include other relevant details here: customer information, products, prices, etc. -->
+    </div>
+    
+    <!-- Include additional sections as needed: product list, total amount, etc. -->
+</body>
+</html>

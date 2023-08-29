@@ -1,0 +1,93 @@
+{% extends 'basee.html' %}
+{% block title %}Address_management{% endblock %}
+{% load static %}
+{% block content %}
+
+<body>
+    <div class="page-wrapper">
+        <header class="header">
+            <div class="header-middle sticky-header">
+                <div class="container">
+    
+                </div><!-- End .container -->
+            </div><!-- End .header-middle -->
+        </header><!-- End .header -->
+     
+        <div class="login-page bg-image pt-4 pb-4 pt-md-4 pb-md-6 pt-lg-4 pb-lg-8">
+    
+            <div class=" container">
+            <div class="form-box">
+                <div class="form-tab">
+                    <ul class="nav nav-pills nav-fill" role="tablist">
+                       
+                           
+                       
+                     
+                        <li class="nav-item">
+                            {% for message in messages %}
+                            <div class="message text-center {% if message.tags %}{{ message.tags }}{% endif %}">
+                                {{ message }}
+                            </div>
+                            {% endfor %} <br>
+    
+                            {% if user %}
+                            <h4 > <strong>Edit Profile</strong></h4>
+                        </li>
+                    </ul>
+    
+                    <div class="tab-content">
+                        
+                        <div class="tab-pane fade show active" id="signin-2" role="tabpanel" aria-labelledby="signin-tab-2">
+    
+                            <form action="{% url 'edit_profile' %}" method="POST">
+                                {% csrf_token %}
+                                
+    
+  
+                                <label>First Name *</label>
+                                <input type="text" class="form-control" name="first_name" value="{{user.first_name}}">
+                                <small class="form-text"></small>
+  
+                                <label>Last Name *</label> 
+                                <input type="text" class="form-control" name="last_name" value="{{user.last_name}}">
+                                <small class="form-text"></small>
+  
+                                <label>Email address *</label>
+                                <input type="email" class="form-control" name="email" value="{{user.email}}">
+  
+                                
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                <button type="submit" class="btn btn-outline-primary-2">
+                                    <span>SAVE CHANGES</span>
+                                    <i class="icon-long-arrow-right"></i>
+                                </button>
+                            </div>
+                            <div class="col-sm-6">
+                              <a href="{% url 'change_password' %}">  <button class="btn btn-outline-primary-2">
+                                    <span>CHANGE PASSWORD </span>
+                                    <i class="icon-long-arrow-right"></i>
+                                </button></a>
+                            </div> 
+                            <div>
+                            </form>
+                        <div class="form-choice">
+                        
+                        </div><!-- End .row -->
+                    </div><!-- End .form-choice -->
+                </div><!-- .End .tab-pane -->
+            </div><!-- End .tab-content -->
+        </div><!-- End .form-tab -->
+     
+    </div><!-- End .form-box -->
+    </div><!-- End .container -->
+    </div><!-- End .login-page section-bg -->
+    </div>
+    </main><!-- End .main -->
+    </div><!-- End .page-wrapper -->
+    <body>
+    
+    {% endif %}
+    
+    {% endblock %}
+    

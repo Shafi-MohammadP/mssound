@@ -1,0 +1,160 @@
+<body>
+  <div class="page-wrapper">
+      <header class="header">
+          <div class="header-middle sticky-header">
+              <div class="container">
+  
+              </div><!-- End .container -->
+          </div><!-- End .header-middle -->
+      </header><!-- End .header -->
+  
+      <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17">
+  
+          <div class=" container">
+          <div class="form-box">
+              <div class="form-tab">
+                  <ul class="nav nav-pills nav-fill" role="tablist">
+  
+  
+  
+  
+                      <li class="nav-item">
+                          {% for message in messages %}
+                      <div class="message text-center {% if message.tags %}{{ message.tags }}{% endif %}">
+                          {{ message }}
+                      </div>
+                      {% endfor %}
+  
+                         
+                          <a class="nav-link"> <strong>Edit Profile</strong></a>
+                      </li>
+                  </ul>
+  
+                  
+  
+                  {% if user %}
+                          <form action="{% url 'edit_profile' %}" method="POST">
+                              {% csrf_token %}
+                              {% for message in messages %}
+                          <div class="message text-center {% if message.tags %}{{ message.tags }}{% endif %}">
+                              {{ message }}
+                          </div>
+                          {% endfor %} <br>
+  
+
+                              <label>First Name *</label>
+                              <input type="text" class="form-control" name="first_name" value="{{user.first_name}}">
+                              <small class="form-text"></small>
+
+                              <label>Last Name *</label> 
+                              <input type="text" class="form-control" name="last_name" value="{{user.last_name}}">
+                              <small class="form-text"></small>
+
+                              <label>Email address *</label>
+                              <input type="email" class="form-control" name="email" value="{{user.email}}">
+
+                              
+                              <div class="row">
+                                  <div class="col-sm-6">
+                              <button type="submit" class="btn btn-outline-primary-2">
+                                  <span>SAVE CHANGES</span>
+                                  <i class="icon-long-arrow-right"></i>
+                              </button>
+                          </div>
+                          {% comment %} <div class="col-sm-6">
+                              <button type="submit" class="btn btn-outline-primary-2">
+                                  <span>SAVE CHANGES</span>
+                                  <i class="icon-long-arrow-right"></i>
+                              </button>
+                          </div> {% endcomment %}
+                          <div>
+                          </form>
+                      </div><!-- .End .tab-pane -->
+          </div><!-- End .tab-content -->
+      </div><!-- End .form-tab -->
+  
+  </div><!-- End .form-box -->
+  </div><!-- End .container -->
+  </div><!-- End .login-page section-bg -->
+  </div>
+  </main><!-- End .main -->
+  </div><!-- End .page-wrapper -->
+  
+
+  <form action="{% url 'add_address'  %}" method="POST">
+    {% csrf_token %}
+    {% for message in messages %}
+    <div
+        class="message text-center {% if message.tags %}{{ message.tags }}{% endif %}">
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    <div class="row">
+        <div class="col-sm-6">
+            <label>First Name *</label>
+            <input type="text" class="form-control" name="firstname"
+                value="{{pre_first_name}}">
+        </div><!-- End .col-sm-6 -->
+
+        <div class="col-sm-6">
+            <label>Last Name *</label>
+            <input type="text" class="form-control" name="lastname"
+                value="{{pre_last_name}}">
+        </div><!-- End .col-sm-6 -->
+    </div><!-- End .row -->
+
+    <label>Mobile NO *</label>
+    <input type="text" class="form-control" name="phone" value="{{pre_phone}}">
+
+
+    <label>Email address *</label>
+    <input type="email" class="form-control" name="email" value="{{pre_email}}">
+
+
+    <label>Address *</label>
+    <input type="text" class="form-control" name="address" value="{{pre_address}}">
+
+
+
+    <div class="row">
+        <div class="col-sm-6">
+            <label>Country *</label>
+            <input type="text" class="form-control" name="country"
+                value="{{pre_country}}">
+        </div><!-- End .col-sm-6 -->
+
+        <div class="col-sm-6">
+            <label>CITY *</label>
+            <input type="text" class="form-control" name="city"
+                value="{{pre_city}}">
+        </div><!-- End .col-sm-6 -->
+    </div><!-- End .row -->
+
+    <div class="row">
+        <div class="col-sm-6">
+            <label>State *</label>
+            <input type="text" class="form-control" name="state"
+                value="{{pre_state}}">
+        </div><!-- End .col-sm-6 -->
+
+        <div class="col-sm-6">
+            <label>PIN CODE *</label>
+            <input type="text" class="form-control" name="pincode"
+                value="{{pre_pincode}}">
+        </div><!-- End .col-sm-6 -->
+    </div><!-- End .row -->
+    <div class="row">
+        <div class="col-sm-6">
+            <button type="submit" class="btn btn-outline-primary-2">
+                <span>SAVE CHANGES</span>
+                <i class="icon-long-arrow-right"></i>
+            </button>
+        </div>
+        <div class="col-sm-6">
+            <a href="{% url 'userprofile' %}" class="btn btn-outline-primary-2"><span>BACK</span><i
+                class="icon-long-arrow-right"></i></a>
+            </button>
+        </div>
+    </div>
+</form>

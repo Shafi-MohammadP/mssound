@@ -1,0 +1,264 @@
+{% extends 'basee.html' %}
+{% block title %}Check out{% endblock %}
+{% load static %}
+{% block content %}
+{% load mathfilters %}
+
+<style>
+    .empty-cart {
+        text-align: center;
+        padding: 50px 0;
+    }
+    
+    .empty-cart-message {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+    
+    .empty-cart-button {
+        margin-left: auto;
+        margin-right: auto;
+        display: inline-block;
+    }
+
+</style>
+
+<main class="main">
+    <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">Wishlist<span>Shop</span></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'shop' %}">Shop</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Wishlist</li>
+                
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+
+    <div class="page-content">
+        <div class="container">
+            {% if wishlist %}
+            <table class="table table-wishlist table-mobile">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Stock Status</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for i in wishlist %}
+                    <tr>
+                        <td class="product-col">
+                            <div class="product">
+                                <figure class="product-media">
+                                    <a href="#">
+                                        <a href="#">
+                                            {% for j in img %}
+                                            {% if j.variant.id == i.variant.id %}
+                                            <img src="{{j.image.url}}" alt="Variant image">
+                                            {% endif %}
+                                            {% endfor %}
+                                        </a>
+                                </figure>
+
+                                <h3 class="product-title">
+                                    {% comment %} <a href="" class="product-details-link" data-product-id="{{ i.variant.product.id }}" data-img-id="{{ i.variant.id }}">{{ i.variant.product.product_name }}</a> {% endcomment %}
+                                    <a href="{% url 'product_show' i.variant.product.id i.variant.id %}">{{i.variant.product.product_name}}
+                                        <img src="{{i.image.url}}"  class="product-image">
+                                    </a>
+                                </h3><!-- End .product-title -->
+                            </div><!-- End .product -->
+                        </td>
+                        <td class="price-col">${{i.variant.product.product_price}}</td>
+                        {% if i.variant.quantity > 0 %}
+                        <td class="stock-col"><span class="in-stock">In stock</span></td>
+                        <input readonly class="mtext-104 cl3 txt-center num-product" type="hidden"
+                                name="num-product" value="1" id="qty-input">
+                        <td class="action-col">
+                            <button class="add-to-cart-btn btn btn-block btn-outline-primary-2" data-product_id="{{ i.variant.id }}"><i
+                                    class="icon-cart-plus"></i>Add to Cart</button>
+                        </td>
+                        {% else %}
+                        <td class="stock-col"><span class="out-of-stock">Out of stock</span></td>
+                        <td></td>
+                        {% endif %}
+                         
+                        
+                            
+                            
+                    
+                        <td class="remove-col"><a href="{% url 'wish_remove' i.id %}">  <button href="##" class="btn-remove"> <i class="icon-close"></i></button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table><!-- End .table table-wishlist -->
+            {% else %}
+            <div class="page-content">
+                <div class="cart">
+                    <div class="container empty-cart">
+                        <h4 class="empty-cart-message">You have no Wishlist Items. Go To Shop</h4>
+                        <a href="{% url 'shop' %}" class="empty-cart-button">
+                            <button type="submit" class="btn btn-outline-primary-2 purchase placeorder">
+                                <span>Shop</span>
+                                <i class="icon-long-arrow-right"></i>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <div class="wishlist-share">
+                <div class="social-icons social-icons-sm mb-2">
+                    <label class="social-label">Share on:</label>
+                    <a href="#" class="social-icon" title="Facebook" target="_blank"><i
+                            class="icon-facebook-f"></i></a>
+                    <a href="#" class="social-icon" title="Twitter" target="_blank"><i
+                            class="icon-twitter"></i></a>
+                    <a href="#" class="social-icon" title="Instagram" target="_blank"><i
+                            class="icon-instagram"></i></a>
+                    <a href="#" class="social-icon" title="Youtube" target="_blank"><i
+                            class="icon-youtube"></i></a>
+                    <a href="#" class="social-icon" title="Pinterest" target="_blank"><i
+                            class="icon-pinterest"></i></a>
+                </div><!-- End .soial-icons -->
+            </div><!-- End .wishlist-share -->
+        </div><!-- End .container -->
+    </div><!-- End .page-content -->
+</main><!-- End .main -->
+
+
+
+</div><!-- End .page-wrapper -->
+<button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
+
+<div class="mobile-menu-container">
+<div class="mobile-menu-wrapper">
+    <span class="mobile-menu-close"><i class="icon-close"></i></span>
+
+    <form action="{% url 'search_view' %}" method="POST" class="mobile-search">
+        {% csrf_token %}
+        <label for="q" class="sr-only">Search</label>
+        <input type="search" class="form-control" name="search" id="q"
+                                placeholder="Search product ..." required>
+        <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+    </form>
+
+    <nav class="mobile-nav">
+        <ul class="mobile-menu">
+            <li >
+                <a href="{% url 'home' %}">Home</a>
+            <li>
+                <a href="{% url 'shop' %}">Shop</a>
+                <ul>
+                    <!-- <li><a href="category-list.html">Shop List</a></li>
+                    <li><a href="category-2cols.html">Shop Grid 2 Columns</a></li>
+                    <li><a href="category.html">Shop Grid 3 Columns</a></li>
+                    <li><a href="category-4cols.html">Shop Grid 4 Columns</a></li>
+                    <li><a href="category-boxed.html"><span>Shop Boxed No Sidebar<span
+                                    class="tip tip-hot">Hot</span></span></a></li>
+                    <li><a href="category-fullwidth.html">Shop Fullwidth No Sidebar</a></li>
+                    <li><a href="product-category-boxed.html">Product Category Boxed</a></li>
+                    <li><a href="product-category-fullwidth.html"><span>Product Category Fullwidth<span
+                                    class="tip tip-new">New</span></span></a></li>
+                    <li><a href="cart.html">Cart</a></li>
+                    <li><a href="checkout.html">Checkout</a></li>
+                    <li><a href="wishlist.html">Wishlist</a></li>
+                    <li><a href="#">Lookbook</a></li> -->
+                </ul>
+            </li>
+            {% comment %} <li>
+                <a href="product.html" class="sf-with-ul">Product</a>
+            </li> {% endcomment %}
+            <li>
+                <a href="{% url 'track_order' %}">Track Order</a>
+            </li>
+            <li>
+                <a href="{% url 'ContactUs' %}">About Us</a>
+            </li>
+        </ul>
+    </nav><!-- End .mobile-nav -->
+    <div class="social-icons">
+        <a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
+        <a href="#" class="social-icon" target="_blank" title="Twitter"><i class="icon-twitter"></i></a>
+        <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+        <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
+    </div><!-- End .social-icons -->
+</div><!-- End .mobile-menu-wrapper -->
+</div><!-- End .mobile-menu-container -->
+
+
+
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    $('.add-to-cart-btn').click(function (e) {
+        e.preventDefault();
+
+        var product_id = $(this).data('product_id');
+        var add_qty = $('#qty-input').val();
+
+        // var cart_qty = $('#pro_qty' + product_id).val();  
+        
+        console.log(product_id, add_qty, 'wetsssssssssssssssssssssssssssssssssssss')
+        $.ajax({
+            method: "POST",
+            url: "{% url 'add_cart' %}",
+            data: {
+
+                'variant_id': product_id,
+                'add_qty': add_qty,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (response) {
+
+                console.log(response);
+
+
+
+                if (response.status === 'No such prodcut found' || response.status === 'Sorry  quantity not available' || response.status === 'Product already in cart') {
+                    swal.fire("Error!", response.status, "error");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } else if (response.status === 'Product added successfully' || response.status === 'Quantity updated in cart') {
+                    swal.fire("", response.status, "success");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } else if (response.status === 'you are not login please Login to continue') {
+                    swal.fire("", response.status, "warning");
+                    $('.cartdata').load(location.href + " .cartdata");
+                }
+                else if (response.status === 'Sorry! this variant not available') {
+                    swal.fire("", response.status, "warning");
+                    $('.cartdata').load(location.href + " .cartdata");
+                }
+                else {
+                    swal("Error!", response.status, "error");
+                    $('.cartdata').load(location.href + " .cartdata");
+                }
+            }
+        });
+    });
+</script>
+<script>
+
+
+
+
+
+
+
+
+{% endblock %}

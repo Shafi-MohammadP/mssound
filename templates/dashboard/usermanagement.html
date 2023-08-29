@@ -1,0 +1,159 @@
+{% extends 'dashboard/dashboardbase.html' %}
+{% block title %}User_management{% endblock %}
+{% load static %}
+{% block content %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+<!-- MDB -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" rel="stylesheet" />
+<style>
+  .btnn {
+    background-color: transparent;
+    color: #4a15f7;
+    border: solid 1px transparent;
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-left: 10px;
+    /* Add a left margin for spacing */
+  }
+
+  .btnn:hover {
+    background-color: #4a15f7;
+    color: white;
+    transform: scale(1.05);
+    /* Increase size on hover */
+  }
+</style>
+
+<section class="content-main">
+  <div class="content-header">
+    <div>
+      {% comment %} <h2 class="content-title card-title">User List</h2> {% endcomment %}
+      {% comment %} <p>All Users of Refined Radiance.</p> {% endcomment %}
+    </div>
+
+  </div>
+  <div class="card mb-4">
+    <header class="card-header">
+      <div class="row gx-3">
+        <div class="col-lg-4 col-md-6 me-auto">
+          <form action="{% url 'Searching_user' %}" method="POST" class="input-group">
+            {% csrf_token %}
+            <input type="search" id="form1" name="search" class="form-control" />
+            <button type="submit" class="btnn"> <!-- Apply the 'btnn' class here -->
+
+              <i class="fa fa-search"></i>
+
+            </button>
+          </form>
+        </div>
+        <div class="col-lg-2 col-6 col-md-3">
+          <form id="user-status-form" method="POST" action="{% url 'user_status_search' %}">
+            {% csrf_token %}
+            <select class="form-select" name="name" id="status-select" style="width: 130px;">
+              <option value="">Status</option>
+              <option value="Blocked">Blocked</option>
+              <option value="Active">Active</option>
+              <option value="All">All</option>
+            </select>
+            <input type="hidden" name="auto_submit" value="true">
+          </form>
+        </div>
+      </div>
+    </header>
+    <!-- card-header end// -->
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">id</th>
+              <th scope="col">Name</th>
+              <th scope="col">Username</th>
+              <th scope="col">Email</th>
+              <th scope="col">Status</th>
+              <th scope="col" class="text-end">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in users %}
+              <tr class="text-uppercase">
+                <td style="text-align: center;">{{ user.id }}</td>
+                <td><b>{{ user.first_name }}</td>
+                <td><b>{{ user.username }}</td>
+                <td><b>{{ user.email }}</td>
+
+                <td>
+                  {% if user.is_active %}
+                  <span class="badge rounded-pill alert-success">Active</span>
+                  {% else %}
+                  <span class="badge rounded-pill alert-warning">Deactive</span>
+                  {% endif %}
+                </td>
+                {% comment %} <td><a href="{% url 'user_view' user.id %}"><span
+                      class="badge rounded-pill alert-View btn btn ">View</span> </a></td> {% endcomment %}
+                <td class="text-end">
+                  {% if user.is_active %}
+                  <a href="#" class="btn btn-md rounded font-sm" data-bs-toggle="modal"
+                    data-bs-target="#confirmationModal{{ user.id }}"
+                    style="background-color: red; color: white;">Block</a>
+                  {% else %}
+                  <a href="#" class="btn btn-md rounded font-sm" data-bs-toggle="modal"
+                    data-bs-target="#confirmationModal{{ user.id }}"
+                    style="background-color: green; color: white;">Unblock</a>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+
+              <!-- Confirmation Modals -->
+              {% for user in users %}
+              <div class="modal fade" id="confirmationModal{{ user.id }}" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      {% if user.is_active %}
+                      <h5 class="modal-title" id="exampleModalLabel">Confirmation Block user</h5>
+                      {% else %}
+                      <h5 class="modal-title" id="exampleModalLabel">Confirmation Unblock user</h5>
+                      {% endif %}
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      {% if user.is_active %}
+
+                      <h6 style="color:red">Are you sure Block this user ?</h6>
+                      {% else %}
+                      <h6 style="color:rgb(7, 194, 29)">Are you sure Unblock this user ?</h6>
+                      {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                      <a href="{% url 'blockuser' user.id %}">
+                        <button type="button" class="btn btn-primary">Confirm</button>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const statusSelect = document.getElementById('status-select');
+                    
+                    statusSelect.addEventListener('change', function () {
+                        document.getElementById('user-status-form').submit();
+                    });
+                });
+            </script>
+
+
+</section>
+
+
+{% endblock %}

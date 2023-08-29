@@ -1,0 +1,410 @@
+{% extends 'basee.html' %}
+{% block title %}APassword_management{% endblock %}
+{% load static %}
+{% block content %}
+
+
+
+<style>
+    .status {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+    }
+</style>
+<main class="main">
+    <div class="page-content">
+        <div class="container">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        {% if address %}
+                        <div class="col-md-6">
+                            <h5 class="card-title fw-semibold mb-4"> ORDER ADDRESS</h5>
+                            <div class="card">
+
+                                <div class="card-body">
+                                    <table>
+
+                                        <tr>
+
+                                            <td><strong>First Name</strong></td>
+                                            <td>:{{address.first_name}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Last Name</strong></td>
+                                            <td>:{{address.last_name}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Phone Number</strong></td>
+                                            <td>:{{address.phone}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Email</strong></td>
+                                            <td>:{{address.email}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Address</strong></td>
+                                            <td>:{{address.address}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Country</strong></td>
+                                            <td>:{{address.country}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>City</strong></td>
+                                            <td>:{{address.city}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>State</strong></td>
+                                            <td>:{{address.state}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Pincode</strong></td>
+                                            <td>:{{address.pincode}}</td>
+                                        </tr>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if orderview %}
+                        <div class="col-md-6">
+                            <h5 class="card-title fw-semibold mb-4"> ORDER DETAILS </h5>
+                            <div class="card">
+
+                                <div class="card-body">
+                                    <table>
+
+                                        <tr>
+                                            <td><strong>Order id</strong></td>
+                                            <td>:{{orderview.id}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong>User Name</strong></td>
+                                            <td>{{orderview.user.first_name}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong>Total price</strong></td>
+                                            <td>:${{orderview.total_price}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Payment method</strong></td>
+                                            <td>:{{orderview.payment_mode}}</td>
+                                        </tr>
+                                        <tr>
+                                            {% if orderview.payment_mode == "cod" %}
+                                            <td><strong>Payment id</strong></td>
+                                            <td>:{{None}}</td>
+                                            {% else %}
+                                            <td><strong>Payment id</strong></td>
+                                            <td>:{{orderview.payment_id}}</td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Tracking no</strong></td>
+                                            <td>:{{orderview.tracking_no}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Ordered date</strong></td>
+                                            <td>:{{orderview.created_at}}</td>
+                                        </tr>
+                                        <tr></tr>
+                                        <!-- <tr>
+                                                <td><strong>Ordder status</strong></td>
+                                                <td>:{{orderview.status}}</td>
+                                            </tr> -->
+                                        <br>
+                                        <tr>
+                                            <td><strong></strong></td>
+                                            <td></td>
+                                        </tr>
+
+                                    </table>
+                                    <br>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        {% endif %}
+
+                        <!-- <h5 class="card-title fw-semibold mb-6" style="text-align: center;">Items</h5> -->
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            {% comment %} <th scope="col">image</th> {% endcomment %}
+                                            <th scope="col">Product name</th>
+                                            <th scope="col">category</th>
+                                            <th scope="col">color</th>
+
+                                            <th scope="col">price</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in products  %}
+                                        <tr>
+                                            {% comment %} {% for j in image %}
+                                            {% if i.variant.id == j.variant.id %}
+                                            <td>
+                                                <div style="width: 30px;" class="overflow-hidden">
+                                                    <img class="w-100" src=" {{ j.image.url}} " alt="">
+                                                </div>
+                                            </td>
+                                            {% endif %}
+                                            {% endfor %} {% endcomment %}
+
+                                            <td><b>{{ i.variant.product.product_name }}</td>
+                                            <td><b>{{ i.variant.product.category.categories }}</td>
+                                            <td><b>{{ i.variant.color }}</td>
+                                            <td><b>{{ i.variant.product.product_price}}</td>
+                                            <td><b>{{ i.quantity }}</td>
+
+                                             <!---order status-->   
+                                            
+                                            <td>
+                                                {% if i.orderitem_status.item_status == 'Pending' %}
+                                        <span class="badge bg-primary rounded-3 fw-semibold">
+                                            {{ i.orderitem_status.item_status }}</span>
+                                        {% elif i.orderitem_status.item_status == 'Processing' %}
+                                        <span class="badge bg-primary rounded-3 fw-semibold">
+                                            {{ i.orderitem_status.item_status }}</span>
+                                        {% elif i.orderitem_status.item_status == 'Shipped' %}
+                                        <span class="badge bg-secondary rounded-3 fw-semibold">
+                                            {{ i.orderitem_status.item_status }}</span>
+                                        {% elif i.orderitem_status.item_status == 'Delivered' %}
+                                        <span class="badge bg-successs rounded-3 fw-semibold">
+                                            {{ i.orderitem_status.item_status }}</span>
+                                        {% elif i.orderitem_status.item_status == 'Cancelled' or i.orderitem_status.item_status == 'Return' %}
+                                        <span class="badge bg-danger rounded-3 fw-semibold">
+                                            {{i.orderitem_status.item_status }}</span>
+                                        {% endif %}
+                                            </td>
+
+                                            {% comment %} <td>
+                                                {% if i.orderitem_status.item_status == 'Delivered' %}
+                                                <button type="button" class="btn btn-outline-primary-2 return-button" data-item-id="{{ i.id }}" data-status="Return">
+                                                    <span>Return</span>
+                                                    <i class="icon-long-arrow-right"></i>
+                                                </button>
+                                                {% elif i.orderitem_status.item_status == 'Return' or i.orderitem_status.item_status == 'Cancelled' %}
+                                                {% else %}
+                                                <button type="button" class="btn btn-outline-primary-2 cancel-button" data-item-id="{{ i.id }}" data-status="Cancelled">
+                                                    <span>Cancel</span>
+                                                    <i class="icon-long-arrow-right"></i>
+                                                </button>
+                                                {% endif %}
+                                            </td> {% endcomment %}
+                                            <td>
+                                                {% if i.orderitem_status.item_status == 'Delivered' %}
+                                               
+                                                <a href="#signin-modal-{{ forloop.counter }}" data-toggle="modal"><span class="btn btn-outline-primary-2" >Return</span></a>
+                                                <div class="modal fade" id="signin-modal-{{ forloop.counter }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-body">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true"><i class="icon-close"></i></span>
+                                                                </button>
+                                            
+                                                                <div class="form-box">
+                                                                    <div class="form-tab">
+                                                                        <ul class="nav nav-pills nav-fill" role="tablist">
+                                                                            <li class="nav-item">
+                                                                                <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab" aria-controls="signin" aria-selected="true">Return</a>
+                                                                            </li>
+                                    
+                                                                        </ul>
+                                                                        <div class="tab-content" id="tab-content-5">
+                                                                            <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
+                                                                              
+                                                                                <form action="{% url 'return_order' i.id %}" method="POST">
+                                                                                    {% csrf_token %}
+                                                                        
+                                                                                    <!-- Return Reasons -->
+                                                                                    <label for="options">Select a Return Reason *</label>
+                                                                                    <select id="options" name="options" class="custom-select custom-select-lg mb-3"  >
+                                                                                        <option value="Product Damage">Product Damage</option>
+                                                                                        <option value="Size Change">Size Change</option>
+                                                                                        <option value="Color Change">Color Change</option>
+                                                                                        <option value="Other">Other</option>
+                                                                                    </select>
+                                                                                    <!-- Notes about your Return -->
+                                                                                    <label for="options">Enter Your Reason *</label>
+                                                                                    <textarea class="form-control" cols="30" rows="4"
+                                                                                        name="reason" value=""></textarea>
+                                                                                
+                                                                                    <div class="form-footer">
+                                                                                        <button type="submit" class="btn btn-outline-primary-2">
+                                                                                            <span>Confirm Return</span>
+                                                                                            <i class="icon-long-arrow-right"></i>
+                                                                                        </button>
+                                                                                    </div><!-- End .form-footer -->
+                                                                                </form>
+                                                                                
+                                                                                
+                                                                
+                                                                               
+                                                                            </div><!-- .End .tab-pane -->
+                                                                         
+                                                                            </div><!-- .End .tab-pane -->
+                                                                        </div><!-- End .tab-content -->
+                                                                    </div><!-- End .form-tab -->
+                                                                </div><!-- End .form-box -->
+                                                            </div><!-- End .modal-body -->
+                                                        </div><!-- End .modal-content -->
+                                                    </div><!-- End .modal-dialog -->
+                                                </div><!-- End .modal -->
+                                            
+            
+                                                
+                                                {% elif i.orderitem_status.item_status == 'Cancelled' or i.orderitem_status.item_status == 'Return' %}
+                                                {% comment %} <a href=""><span class="btn btn-outline-primary-2"></span></a> {% endcomment %}
+                                                {% else %}
+                                                
+                                                <a href="#cancel-modal-{{ forloop.counter }}" data-toggle="modal">
+                                                    <span class="btn btn-outline-primary-2">Cancel</span>
+                                                </a>
+                                                <div class="modal fade" id="cancel-modal-{{ forloop.counter }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-body">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true"><i class="icon-close"></i></span>
+                                                                </button>
+                                                
+                                                                <div class="form-box">
+                                                                    <div class="form-tab">
+                                                                        <ul class="nav nav-pills nav-fill" role="tablist">
+                                                                            <li class="nav-item">
+                                                                                <a class="nav-link active" data-toggle="tab" role="tab" aria-controls="signin" aria-selected="true">Cancel</a>
+                                                                            </li>
+                                                                        </ul>
+                                                                        <div class="tab-content" id="tab-content-{{ forloop.counter }}">
+                                                                            <div class="tab-pane fade show active" id="cancel" role="tabpanel" aria-labelledby="signin-tab">
+                                                                                <form action="{% url 'cancel_order' i.id %}" method="POST">
+                                                                                    {% csrf_token %}
+                                                                                    <!-- Return Reasons -->
+                                                                                    <label for="options">Select a Cancel Reason *</label>
+                                                                                    <select id="options"  name="options" class="custom-select custom-select-lg mb-3">
+                                                                                        <option value="Size Change">Low Quality</option>
+                                                                                        <option value="Size Change">Size Change</option>
+                                                                                        <option value="Product Damage">Product Damage</option>
+                                                                                        <option value="Color Change">Color Change</option>
+                                                                                        <option value="Other">Other</option>
+                                                                                    </select>
+                                                                                    <!-- Notes about your Return -->
+                                                                                    <label>Enter Your Reason *</label>
+                                                                                    <textarea class="form-control" cols="30" rows="4" placeholder="Notes about your Cancel, must be no more than 30 words" name="reason" value=""></textarea>
+                                                                                    <div class="form-footer">
+                                                                                        <button type="submit" class="btn btn-outline-primary-2">
+                                                                                            <span>Confirm Cancel</span>
+                                                                                            <i class="icon-long-arrow-right"></i>
+                                                                                        </button>
+                                                                                    </div><!-- End .form-footer -->
+                                                                                </form>
+                                                                            </div><!-- .End .tab-pane -->
+                                                                        </div><!-- End .tab-content -->
+                                                                    </div><!-- End .form-tab -->
+                                                                </div><!-- End .form-box -->
+                                                            </div><!-- End .modal-body -->
+                                                        </div><!-- End .modal-content -->
+                                                    </div><!-- End .modal-dialog -->
+                                                </div><!-- End .modal -->
+                                            
+                                            
+                                                {% endif %}
+            
+                                            </td>
+
+
+
+
+
+
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Add SweetAlert2 CSS and JS files -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.all.min.js"></script>
+{% comment %} <script>
+$(document).ready(function () {
+    $('.return-button, .cancel-button').click(function () {
+        var itemId = $(this).data('item-id');
+        var newStatus = $(this).data('status');
+        
+        var formData = new FormData();
+        formData.append('orderitem_id', itemId);
+        formData.append('status', newStatus);
+        
+        $.ajax({
+            type: "POST",
+            url: "{% url 'api_change_status' %}",
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-CSRFToken': "{{ csrf_token }}",
+            },
+            success: function (response) {
+                if (response.status === 'success') {
+                    console.log('Order Cancelled successfully!');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Order Cancelled  successfully!',
+                    });
+                    
+                    // Update UI as needed
+                    setTimeout(function () {
+                        window.location.href = "{% url 'userprofile' %}"; // Update with your actual URL
+                    }, 3000); // Adjust the time delay as needed
+                } else {
+                    console.error('Error changing status: ' + response.message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Failed to change status. Please try again later.',
+                    });
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.error('Error changing status: ' + errorThrown);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Failed to change status. Please try again later.',
+                });
+            }
+        });
+    });
+});
+</script> {% endcomment %}
+
+
+
+{% endblock %}
